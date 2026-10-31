@@ -147,16 +147,16 @@ function Panel(props) {
     })(), null);
     _$insert(_el$0, (() => {
       var _c$2 = _$memo(() => !!!open());
-      return () => _c$2() ? null : [_$memo(() => _$memo(() => !!(props.state.loading && !go()))() ? (() => {
-        var _el$17 = _$createElement("text");
-        _$insertNode(_el$17, _$createTextNode(`Loading…`));
-        _$effect(_$p => _$setProp(_el$17, "fg", theme.text.muted, _$p));
-        return _el$17;
+      return () => _c$2() ? null : _$memo(() => _$memo(() => !!(props.state.loading && !go()))() ? (() => {
+        var _el$15 = _$createElement("text");
+        _$insertNode(_el$15, _$createTextNode(`Loading…`));
+        _$effect(_$p => _$setProp(_el$15, "fg", theme.text.muted, _$p));
+        return _el$15;
       })() : _$memo(() => !!(props.state.error && !go()))() ? (() => {
-        var _el$19 = _$createElement("text");
-        _$insert(_el$19, () => props.state.error);
-        _$effect(_$p => _$setProp(_el$19, "fg", theme.text.feedback.error.base, _$p));
-        return _el$19;
+        var _el$17 = _$createElement("text");
+        _$insert(_el$17, () => props.state.error);
+        _$effect(_$p => _$setProp(_el$17, "fg", theme.text.feedback.error.base, _$p));
+        return _el$17;
       })() : _$memo(() => !!go())() ? [_$createComponent(MeterRow, {
         theme: theme,
         get themeMode() {
@@ -203,15 +203,11 @@ function Panel(props) {
           return props.state.now;
         }
       })] : (() => {
-        var _el$20 = _$createElement("text");
-        _$insertNode(_el$20, _$createTextNode(`No Go quota`));
-        _$effect(_$p => _$setProp(_el$20, "fg", theme.text.muted, _$p));
-        return _el$20;
-      })()), (() => {
-        var _el$15 = _$createElement("text");
-        _$insertNode(_el$15, _$createTextNode(` `));
-        return _el$15;
-      })()];
+        var _el$18 = _$createElement("text");
+        _$insertNode(_el$18, _$createTextNode(`No Go quota`));
+        _$effect(_$p => _$setProp(_el$18, "fg", theme.text.muted, _$p));
+        return _el$18;
+      })());
     })(), null);
     _$effect(_p$ => {
       var _v$3 = theme.text.base,

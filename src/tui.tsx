@@ -156,7 +156,6 @@ function Panel(props: {
           ) : (
             <text fg={theme.text.muted}>No Go quota</text>
           )}
-          <text> </text>
         </>
       )}
     </box>
