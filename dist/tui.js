@@ -128,8 +128,21 @@ function Panel(props) {
     _$setProp(_el$0, "width", "100%");
     _$insertNode(_el$1, _el$10);
     _$insertNode(_el$1, _el$11);
+    _$use(element => {
+      if (!element) return;
+      const update = () => {
+        const next = (element.width ?? 0) | 0;
+        if (!next) return;
+        props.setUI(draft => {
+          if (draft.barWidth !== next) draft.barWidth = next;
+        });
+      };
+      element.onSizeChange = update;
+      queueMicrotask(update);
+    }, _el$1);
     _$setProp(_el$1, "flexDirection", "row");
     _$setProp(_el$1, "gap", 1);
+    _$setProp(_el$1, "width", "100%");
     _$setProp(_el$1, "onMouseDown", toggle);
     _$insert(_el$10, () => open() ? "▼" : "▶");
     _$insertNode(_el$11, _el$12);
@@ -167,7 +180,7 @@ function Panel(props) {
           return go().rolling;
         },
         get width() {
-          return props.ui.width;
+          return props.ui.barWidth || props.ui.width;
         },
         get now() {
           return props.state.now;
@@ -182,7 +195,7 @@ function Panel(props) {
           return go().weekly;
         },
         get width() {
-          return props.ui.width;
+          return props.ui.barWidth || props.ui.width;
         },
         get now() {
           return props.state.now;
@@ -197,7 +210,7 @@ function Panel(props) {
           return go().monthly;
         },
         get width() {
-          return props.ui.width;
+          return props.ui.barWidth || props.ui.width;
         },
         get now() {
           return props.state.now;
@@ -239,7 +252,8 @@ export default Plugin.define({
     });
     const [ui, setUI] = ctx.storage.memory("ui", {
       initial: {
-        width: FALLBACK_WIDTH
+        width: FALLBACK_WIDTH,
+        barWidth: 0
       }
     });
     let disposed = false;
@@ -269,6 +283,11 @@ export default Plugin.define({
     };
     void refresh();
     const interval = setInterval(() => void refresh(), 60_000);
+    const tick = setInterval(() => {
+      setState(draft => {
+        draft.now = Date.now();
+      });
+    }, 5_000);
     let timer;
     const schedule = () => {
       if (timer) clearTimeout(timer);
@@ -289,6 +308,7 @@ export default Plugin.define({
     return () => {
       disposed = true;
       clearInterval(interval);
+      clearInterval(tick);
       if (timer) clearTimeout(timer);
       for (const stop of stops) stop();
       dispose();

@@ -21,7 +21,7 @@ type State = {
   go?: Go
 }
 
-type UI = { width: number }
+type UI = { width: number; barWidth: number }
 type ViewState = { open: boolean }
 
 const FALLBACK_WIDTH = 34
@@ -131,7 +131,18 @@ function Panel(props: {
         queueMicrotask(update)
       }) as any}
     >
-      <box flexDirection="row" gap={1} onMouseDown={toggle}>
+      <box flexDirection="row" gap={1} width="100%" onMouseDown={toggle} ref={((element: any) => {
+        if (!element) return
+        const update = () => {
+          const next = (element.width ?? 0) | 0
+          if (!next) return
+          props.setUI((draft) => {
+            if (draft.barWidth !== next) draft.barWidth = next
+          })
+        }
+        element.onSizeChange = update
+        queueMicrotask(update)
+      }) as any}>
         <text fg={theme.text.base}>{open() ? "▼" : "▶"}</text>
         <text fg={theme.text.base}>
           <b>OpenCode Go</b>
@@ -149,9 +160,9 @@ function Panel(props: {
             <text fg={theme.text.feedback.error.base}>{props.state.error}</text>
           ) : go() ? (
             <>
-              <MeterRow theme={theme} themeMode={props.ctx.themeMode} label="5h" meter={go()!.rolling} width={props.ui.width} now={props.state.now} />
-              <MeterRow theme={theme} themeMode={props.ctx.themeMode} label="Weekly" meter={go()!.weekly} width={props.ui.width} now={props.state.now} />
-              <MeterRow theme={theme} themeMode={props.ctx.themeMode} label="Monthly" meter={go()!.monthly} width={props.ui.width} now={props.state.now} />
+              <MeterRow theme={theme} themeMode={props.ctx.themeMode} label="5h" meter={go()!.rolling} width={props.ui.barWidth || props.ui.width} now={props.state.now} />
+              <MeterRow theme={theme} themeMode={props.ctx.themeMode} label="Weekly" meter={go()!.weekly} width={props.ui.barWidth || props.ui.width} now={props.state.now} />
+              <MeterRow theme={theme} themeMode={props.ctx.themeMode} label="Monthly" meter={go()!.monthly} width={props.ui.barWidth || props.ui.width} now={props.state.now} />
             </>
           ) : (
             <text fg={theme.text.muted}>No Go quota</text>
@@ -169,7 +180,7 @@ export default Plugin.define({
       initial: { loading: true, error: "", now: Date.now() },
     })
     const [view, setView] = ctx.storage.store<ViewState>("view", { initial: { open: true } })
-    const [ui, setUI] = ctx.storage.memory<UI>("ui", { initial: { width: FALLBACK_WIDTH } })
+    const [ui, setUI] = ctx.storage.memory<UI>("ui", { initial: { width: FALLBACK_WIDTH, barWidth: 0 } })
 
     let disposed = false
     const refresh = async () => {
@@ -197,6 +208,11 @@ export default Plugin.define({
 
     void refresh()
     const interval = setInterval(() => void refresh(), 60_000)
+    const tick = setInterval(() => {
+      setState((draft) => {
+        draft.now = Date.now()
+      })
+    }, 5_000)
 
     let timer: ReturnType<typeof setTimeout> | undefined
     const schedule = () => {
@@ -220,6 +236,7 @@ export default Plugin.define({
     return () => {
       disposed = true
       clearInterval(interval)
+      clearInterval(tick)
       if (timer) clearTimeout(timer)
       for (const stop of stops) stop()
       dispose()
