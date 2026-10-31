@@ -69,12 +69,12 @@ function MeterRow(props) {
     _$insert(_el$6, used > 0 ? (() => {
       var _el$8 = _$createElement("text");
       _$setProp(_el$8, "fg", color);
-      _$insert(_el$8, () => "▬".repeat(used));
+      _$insert(_el$8, () => "━".repeat(used));
       return _el$8;
     })() : null, null);
     _$insert(_el$6, rest > 0 ? (() => {
       var _el$9 = _$createElement("text");
-      _$insert(_el$9, () => "▬".repeat(rest));
+      _$insert(_el$9, () => "━".repeat(rest));
       _$effect(_$p => _$setProp(_el$9, "fg", trackColor(props.themeMode), _$p));
       return _el$9;
     })() : null, null);

@@ -80,10 +80,10 @@ function MeterRow(props: {
       </box>
       <box flexDirection="row" height={1} width="100%">
         {used > 0 ? (
-          <text fg={color}>{"▬".repeat(used)}</text>
+          <text fg={color}>{"━".repeat(used)}</text>
         ) : null}
         {rest > 0 ? (
-          <text fg={trackColor(props.themeMode)}>{"▬".repeat(rest)}</text>
+          <text fg={trackColor(props.themeMode)}>{"━".repeat(rest)}</text>
         ) : null}
       </box>
     </box>
