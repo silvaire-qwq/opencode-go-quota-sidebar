@@ -276,7 +276,7 @@ export default Plugin.define({
     };
     const stops = [ctx.data.on("session.execution.succeeded", schedule), ctx.data.on("session.execution.failed", schedule), ctx.data.on("session.execution.interrupted", schedule), ctx.data.on("session.idle", schedule)];
     const dispose = ctx.ui.slot({
-      append: "sidebar.content",
+      prepend: "sidebar.content",
       render: () => _$createComponent(Panel, {
         ctx: ctx,
         state: state,

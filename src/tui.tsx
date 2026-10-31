@@ -211,7 +211,7 @@ export default Plugin.define({
     ]
 
     const dispose = ctx.ui.slot({
-      append: "sidebar.content",
+      prepend: "sidebar.content",
       render: () => (
         <Panel ctx={ctx} state={state} view={view} setView={setView} ui={ui} setUI={setUI} />
       ),
