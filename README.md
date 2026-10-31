@@ -13,10 +13,10 @@ Three rows, each with a label on the left and the used percentage on the right:
 | Weekly | Weekly allowance |
 | Monthly | Monthly allowance |
 
-The used part of each bar is green, the remaining part is gray. Click the
-`OpenCode Go` header to collapse the panel. When collapsed, the header shows the
-highest used percentage in gray. Each label is followed by a light reset
-countdown such as `(3h 15m)`.
+The used part of each bar is green up to 50%, yellow above 50%, and red above
+80%. The remaining part is gray. Click the `OpenCode Go` header to collapse the
+panel. When collapsed, the header shows the highest used percentage in gray. Each
+label is followed by a light reset countdown such as `(3h 15m)`.
 
 ## Data
 

@@ -27,12 +27,18 @@ function formatReset(at, now) {
   if (minutes > 0) return `${minutes}m`;
   return "<1m";
 }
+function barColor(theme, percent) {
+  if (percent > 80) return theme.text.feedback.error.base;
+  if (percent > 50) return theme.text.feedback.warning.base;
+  return theme.text.feedback.success.base;
+}
 function MeterRow(props) {
   const percent = clamped(props.meter);
   const total = Math.max(1, props.width);
   const used = percent > 0 ? Math.min(total, Math.max(1, Math.round(percent / 100 * total))) : 0;
   const rest = Math.max(0, total - used);
   const reset = formatReset(props.meter.resetsAt, props.now);
+  const color = barColor(props.theme, percent);
   return (() => {
     var _el$ = _$createElement("box"),
       _el$2 = _$createElement("box"),
@@ -62,8 +68,8 @@ function MeterRow(props) {
     _$setProp(_el$6, "width", "100%");
     _$insert(_el$6, used > 0 ? (() => {
       var _el$8 = _$createElement("text");
+      _$setProp(_el$8, "fg", color);
       _$insert(_el$8, () => "▬".repeat(used));
-      _$effect(_$p => _$setProp(_el$8, "fg", props.theme.text.feedback.success.base, _$p));
       return _el$8;
     })() : null, null);
     _$insert(_el$6, rest > 0 ? (() => {

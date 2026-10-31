@@ -47,6 +47,12 @@ function formatReset(at: number, now: number): string {
   return "<1m"
 }
 
+function barColor(theme: Context["theme"], percent: number): string {
+  if (percent > 80) return theme.text.feedback.error.base
+  if (percent > 50) return theme.text.feedback.warning.base
+  return theme.text.feedback.success.base
+}
+
 function MeterRow(props: {
   theme: Context["theme"]
   themeMode: "dark" | "light"
@@ -60,6 +66,7 @@ function MeterRow(props: {
   const used = percent > 0 ? Math.min(total, Math.max(1, Math.round((percent / 100) * total))) : 0
   const rest = Math.max(0, total - used)
   const reset = formatReset(props.meter.resetsAt, props.now)
+  const color = barColor(props.theme, percent)
 
   return (
     <box flexDirection="column">
@@ -73,7 +80,7 @@ function MeterRow(props: {
       </box>
       <box flexDirection="row" height={1} width="100%">
         {used > 0 ? (
-          <text fg={props.theme.text.feedback.success.base}>{"▬".repeat(used)}</text>
+          <text fg={color}>{"▬".repeat(used)}</text>
         ) : null}
         {rest > 0 ? (
           <text fg={trackColor(props.themeMode)}>{"▬".repeat(rest)}</text>
